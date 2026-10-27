@@ -1,3 +1,4 @@
+import { srv } from "../../utils/serverBase";
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import axios from "axios";
 import debounce from "lodash.debounce";
@@ -28,7 +29,7 @@ const FollowDashboard = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const res = await axios.get(process.env.REACT_APP_USER_PROFILE, { withCredentials: true });
+        const res = await axios.get(srv(process.env.REACT_APP_USER_PROFILE), { withCredentials: true });
         const user = res.data.user;
         setFollowingName(user.name);
         setFollowerCount(user.followed_count || 0);
@@ -46,7 +47,7 @@ const FollowDashboard = () => {
   const checkFollowingStatus = async () => {
     if (!followingName || !followedName) return;
     try {
-      const response = await axios.post(process.env.REACT_APP_CHECK_FOLLOWING, 
+      const response = await axios.post(srv(process.env.REACT_APP_CHECK_FOLLOWING), 
         { following_name: followingName, followed_name: followedName }, { withCredentials: true });
       setIsFollowing(response.data.isFollowing);
     } catch (error) {
@@ -57,7 +58,7 @@ const FollowDashboard = () => {
   // Handle following a user
   const handleFollow = async () => {
     try {
-      const response = await axios.post(process.env.REACT_APP_FOLLOW,
+      const response = await axios.post(srv(process.env.REACT_APP_FOLLOW),
         { following_name: followingName, followed_name: followedName }, { withCredentials: true });
       setMessage(response.data.message);
       setIsFollowing(true);
@@ -68,7 +69,7 @@ const FollowDashboard = () => {
   
   const handleUnfollow = async () => {
     try {
-      const response = await axios.post(process.env.REACT_APP_UNFOLLOW,
+      const response = await axios.post(srv(process.env.REACT_APP_UNFOLLOW),
         { following_name: followingName, followed_name: followedName }, { withCredentials: true });
       setMessage(response.data.message);
       checkFollowingStatus();
@@ -79,7 +80,7 @@ const FollowDashboard = () => {
   
   const debouncedSearchUsers = useCallback(debounce(async (query) => {
     try {
-      const res = await axios.get(`${process.env.REACT_APP_SEARCH_USERS}?searchQuery=${query}`, { withCredentials: true });
+      const res = await axios.get(`${srv(process.env.REACT_APP_SEARCH_USERS)}?searchQuery=${query}`, { withCredentials: true });
       setSearchResults(res.data?.users || []);
     } catch (error) {
       console.error("Error searching users:", error);

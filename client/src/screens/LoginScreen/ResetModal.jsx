@@ -1,3 +1,4 @@
+import { srv } from "../../utils/serverBase";
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -10,7 +11,7 @@ const ResetModal = ({ show, onClose }) => {
 
   const handleForgotPassword = async () => {
     try {
-      const response = await axios.post(process.env.REACT_APP_FORGOT_PASSWORD_SEND_URI, { email: emailForReset });
+      const response = await axios.post(srv(process.env.REACT_APP_FORGOT_PASSWORD_SEND_URI), { email: emailForReset });
       setMessage(response.data.message); setShowOtpInput(true);
     } catch (error) {
       console.error(error);
@@ -20,7 +21,7 @@ const ResetModal = ({ show, onClose }) => {
 
   const handleVerifyOtp = async () => {
     try {
-      const response = await axios.post(process.env.REACT_APP_VERIFY_OTP_URI, { email: emailForReset, otp });
+      const response = await axios.post(srv(process.env.REACT_APP_VERIFY_OTP_URI), { email: emailForReset, otp });
       setMessage(response.data.message);
       if (response.data.message === "OTP verified successfully.") setShowPasswordInput(true);
     } catch (error) {
@@ -32,7 +33,7 @@ const ResetModal = ({ show, onClose }) => {
   const handleSetNewPassword = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(process.env.REACT_APP_UPDATE_PASSWORD_URI, { email: emailForReset, password: newPassword });
+      await axios.post(srv(process.env.REACT_APP_UPDATE_PASSWORD_URI), { email: emailForReset, password: newPassword });
       setMessage("Password updated successfully");
       navigate("/login");
     } catch (error) {

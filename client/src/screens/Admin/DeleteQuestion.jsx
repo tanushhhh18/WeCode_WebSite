@@ -1,3 +1,4 @@
+import { srv } from "../../utils/serverBase";
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -14,7 +15,7 @@ const DeleteQuestion = () => {
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const response = await axios.get(process.env.REACT_APP_GET_ALL_QUESTIONS, { withCredentials: true });
+        const response = await axios.get(srv(process.env.REACT_APP_GET_ALL_QUESTIONS), { withCredentials: true });
         setQuestionsList(response.data.questions);
       } catch (err) {
         console.error("Failed to fetch questions", err);
@@ -41,7 +42,7 @@ const DeleteQuestion = () => {
     try {
       // Send POST request to delete the question by title (and optionally topic)
       const response = await axios.post(
-        process.env.REACT_APP_Admin_question_delete,
+        srv(process.env.REACT_APP_Admin_question_delete),
         formData,
         { withCredentials: true }
       );
@@ -53,7 +54,7 @@ const DeleteQuestion = () => {
           title: ''
         });
         // Refresh the questions list after deletion
-        const fetchQuestions = await axios.get(process.env.REACT_APP_GET_ALL_QUESTIONS, { withCredentials: true });
+        const fetchQuestions = await axios.get(srv(process.env.REACT_APP_GET_ALL_QUESTIONS), { withCredentials: true });
         setQuestionsList(fetchQuestions.data.questions);
       }
     } catch (error) {
@@ -66,7 +67,7 @@ const DeleteQuestion = () => {
     try {
       // Send POST request to delete the question by title (and optionally topic)
       const response = await axios.post(
-        process.env.REACT_APP_Admin_question_delete,
+        srv(process.env.REACT_APP_Admin_question_delete),
         { topic: question.topic, title: question.title },
         { withCredentials: true }
       );
@@ -86,7 +87,7 @@ const DeleteQuestion = () => {
     const confirmDelete = window.confirm("Are you sure you want to delete all questions?");
     if (confirmDelete) {
       try {
-        await axios.post(process.env.REACT_APP_Admin_question_delete_ALL, { withCredentials: true });
+        await axios.post(srv(process.env.REACT_APP_Admin_question_delete_ALL), { withCredentials: true });
         alert('All questions deleted successfully!');
         setQuestionsList([]); // Clear the list after deletion
       } catch (error) {

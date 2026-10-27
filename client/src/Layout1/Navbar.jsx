@@ -1,3 +1,4 @@
+import { srv } from "../utils/serverBase";
 import React, { useEffect, useState } from "react";
 import { Navigate, useNavigate, useLocation } from "react-router-dom";
 import { handleLogout } from "../utils/Logout.js";
@@ -5,7 +6,7 @@ import { createroom, joinroom } from "../Rooms/room.jsx";
 import { io } from "socket.io-client";
 import axios from "axios";
 import solvedproblemslist from "../screens/solvedproblemslist/solvedproblemslist";
-const socket = io(process.env.REACT_APP_SOCKET_URL);
+const socket = io(srv(process.env.REACT_APP_SOCKET_URL));
 
 // Enhanced styles with animations
 const styles = {
@@ -65,7 +66,7 @@ const Navbar = () => {
     
     const fetchUserPoints = async () => {
       try {
-        const response = await axios.get(process.env.REACT_APP_USER_POINTS_VIEW, { withCredentials: true });
+        const response = await axios.get(srv(process.env.REACT_APP_USER_POINTS_VIEW), { withCredentials: true });
         if (response.data && typeof response.data.points === "number") updateState({ userPoints: response.data.points });
       } catch (error) { console.error("Failed to fetch user points:", error); }
     };

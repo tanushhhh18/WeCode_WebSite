@@ -1,3 +1,4 @@
+import { srv } from "../../utils/serverBase";
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -85,7 +86,7 @@ const handleEmailSubmit = () => {
     return alert('Please enter a valid email address');
   }
 
-  axios.post(process.env.REACT_APP_FORGOT_PASSWORD_SEND_URI, {
+  axios.post(srv(process.env.REACT_APP_FORGOT_PASSWORD_SEND_URI), {
     email,
     type: 'contact'
   })

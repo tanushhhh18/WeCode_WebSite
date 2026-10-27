@@ -1,3 +1,4 @@
+import { srv } from "../../utils/serverBase";
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -23,7 +24,7 @@ const UpdateQuestion = ({ formData = {}, setFormData }) => {
     e.preventDefault();
     try {
       // Make PUT request to update the question
-      await axios.put(process.env.REACT_APP_ADMIN_QUESTION_UPDATE, updatedData, { withCredentials: true });
+      await axios.put(srv(process.env.REACT_APP_ADMIN_QUESTION_UPDATE), updatedData, { withCredentials: true });
       alert('Question updated successfully!');
       // Reset the form data after successful update
       setFormData({

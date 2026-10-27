@@ -1,3 +1,4 @@
+import { srv } from "../../utils/serverBase";
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import AddQuestion from './AddQuestion';
@@ -16,7 +17,7 @@ const AdminDashboard = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.post(process.env.REACT_APP_LOGOUT_URI, {}, { withCredentials: true });
+      await axios.post(srv(process.env.REACT_APP_LOGOUT_URI), {}, { withCredentials: true });
       // Redirect to login or homepage after successful logout
       window.location.href = '/login';  // Adjust the redirect path as necessary
     } catch (error) {

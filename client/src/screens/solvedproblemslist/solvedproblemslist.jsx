@@ -1,3 +1,4 @@
+import { srv } from "../../utils/serverBase";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
@@ -35,16 +36,16 @@ const SolvedProblemsList = () => {
     const fetchData = async () => {
       try {
         // Fetch solved questions
-        const questionsRes = await axios.get(process.env.REACT_APP_SOLVED_QUESTION, { withCredentials: true });
+        const questionsRes = await axios.get(srv(process.env.REACT_APP_SOLVED_QUESTION), { withCredentials: true });
         const allQuestions = questionsRes.data.questions || [];
         setSubmittedQuestions(allQuestions.filter(q => q.important === true));
         
         // Fetch custom lists
-        const listsRes = await axios.get(process.env.REACT_APP_CUSTOM_LIST, { withCredentials: true });
+        const listsRes = await axios.get(srv(process.env.REACT_APP_CUSTOM_LIST), { withCredentials: true });
         setcustomlist(listsRes.data.customLists);
         
         // Fetch topic graph data
-        const graphRes = await axios.get(process.env.REACT_APP_QUESTION_GRAPH, { withCredentials: true });
+        const graphRes = await axios.get(srv(process.env.REACT_APP_QUESTION_GRAPH), { withCredentials: true });
         setTopicGraphData(graphRes.data.topicCount || graphRes.data.titlecount || {});
       } catch (err) {
         console.error("Error fetching data:", err);
@@ -57,7 +58,7 @@ const SolvedProblemsList = () => {
   const createnewcustomlist = async (listname) => {
     if (!listname.trim()) return;
     try {
-      await axios.post(process.env.REACT_APP_CREATE_CUSTOM_LIST, { listname }, { withCredentials: true });
+      await axios.post(srv(process.env.REACT_APP_CREATE_CUSTOM_LIST), { listname }, { withCredentials: true });
       getallcustomlists();
       setNewListName("");
     } catch (err) {
@@ -68,14 +69,14 @@ const SolvedProblemsList = () => {
 
   const getallcustomlists = async () => {
     try {
-      const res = await axios.get(process.env.REACT_APP_CUSTOM_LIST, { withCredentials: true });
+      const res = await axios.get(srv(process.env.REACT_APP_CUSTOM_LIST), { withCredentials: true });
       setcustomlist(res.data.customLists);
     } catch (err) { console.error("Error fetching custom lists:", err); }
   };
 
   const addquestiontocustomlist = async (listId, questionId) => {
     try {
-      await axios.post(process.env.REACT_APP_ADD_QUESTION_TO_CUSTOM_LIST, { listId, questionId }, { withCredentials: true });
+      await axios.post(srv(process.env.REACT_APP_ADD_QUESTION_TO_CUSTOM_LIST), { listId, questionId }, { withCredentials: true });
       if (listId === selectedListId && !showcustomlistquestions.includes(questionId)) {
         setshowcustomlistquestions(prev => [...prev, questionId]);
       }
@@ -85,7 +86,7 @@ const SolvedProblemsList = () => {
   const viewcustomlist = async (listId) => {
     if (!listId) return;
     try {
-      const res = await axios.post(process.env.REACT_APP_ALL_QUESTIONS, { listId }, { withCredentials: true });
+      const res = await axios.post(srv(process.env.REACT_APP_ALL_QUESTIONS), { listId }, { withCredentials: true });
       setshowcustomlistquestions(res.data.questions);
       setSelectedListId(listId);
     } catch (err) { console.error("Error viewing custom list:", err); }
@@ -93,7 +94,7 @@ const SolvedProblemsList = () => {
 
   const deletecustomlist = async (listId) => {
     try {
-      await axios.post(process.env.REACT_APP_DELETE_CUSTOM_LIST, { listId }, { withCredentials: true });
+      await axios.post(srv(process.env.REACT_APP_DELETE_CUSTOM_LIST), { listId }, { withCredentials: true });
       setcustomlist(customlist.filter(list => list._id !== listId));
       setSelectedListId(null);
       setshowcustomlistquestions([]);
@@ -102,7 +103,7 @@ const SolvedProblemsList = () => {
 
   const deletequestionfromcustomlist = async (listId, questionId) => {
     try {
-      await axios.post(process.env.REACT_APP_DELETE_QUESTION_FROM_CUSTOM_LIST, { listId, questionId }, { withCredentials: true });
+      await axios.post(srv(process.env.REACT_APP_DELETE_QUESTION_FROM_CUSTOM_LIST), { listId, questionId }, { withCredentials: true });
       viewcustomlist(listId);
     } catch (err) { console.error("Error deleting question from list:", err); }
   };

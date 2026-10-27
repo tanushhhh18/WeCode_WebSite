@@ -1,3 +1,4 @@
+import { srv } from "../../utils/serverBase";
 import socket from "../../sockets/socket";
 import React, { useState, useEffect, useRef } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
@@ -46,7 +47,7 @@ const CustomRoom = () => {
       const title = question?.title || publicRoomId?.replace(/-/g, " ");
       if (!title) return;
       try {
-        const res = await axios.get(`${process.env.REACT_APP_TESTCASE_API}/default/${title}`);
+        const res = await axios.get(`${srv(process.env.REACT_APP_TESTCASE_API)}/default/${title}`);
         const defaultCode = res.data.defaultCode;
         window.defaultQuestionCode = { ...window.defaultQuestionCode, [title.toLowerCase()]: { javascript: defaultCode } };
         setInitialCode(defaultCode);
@@ -60,7 +61,7 @@ const CustomRoom = () => {
     const title = question?.title || publicRoomId?.replace(/-/g, " ");
     if (!code || !title) { setOutput("Editor is empty or no question loaded."); return; }
     try {
-      const res = await axios.post(`${process.env.REACT_APP_CODE_SUBMIT}`, { code, language: languageId, title }, { withCredentials: true });
+      const res = await axios.post(`${srv(process.env.REACT_APP_CODE_SUBMIT)}`, { code, language: languageId, title }, { withCredentials: true });
       const results = res.data.testResults;
       if (results && Array.isArray(results)) {
         const formattedOutput = results.map((result, idx) => `Test Case ${idx + 1}:\nInput: ${result.input}\nExpected: ${result.expectedOutput}\nActual: ${result.actualOutput}\n`).join("\n-------------------\n");
@@ -85,7 +86,7 @@ const CustomRoom = () => {
     console.log("Calling backend API to end room");
     try {
       console.log("Posting to backend to end room with ID:", currentRoomId);
-      await axios.post(`${process.env.REACT_APP_CALL_ENDPOINT}`, { roomId: currentRoomId }, { withCredentials: true });
+      await axios.post(`${srv(process.env.REACT_APP_CALL_ENDPOINT)}`, { roomId: currentRoomId }, { withCredentials: true });
       navigate("/dsaDashboard");
     } catch (error) {
       navigate("/dsaDashboard");

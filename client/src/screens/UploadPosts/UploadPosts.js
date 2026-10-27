@@ -1,3 +1,4 @@
+import { srv } from "../../utils/serverBase";
 import React, { useState } from "react";
 import axios from "axios";
 import Layout from "../../Layout1/Layout.jsx";
@@ -51,7 +52,7 @@ const UploadPosts = () => {
 
     try {
       const response = await axios.post(
-        process.env.REACT_APP_UPLOAD_POST_URI,
+        srv(process.env.REACT_APP_UPLOAD_POST_URI),
         formData,
         {
           headers: {

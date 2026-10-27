@@ -1,3 +1,4 @@
+import { srv } from "../../utils/serverBase";
 import React, { useState } from 'react';
 import axios from 'axios';
 import * as XLSX from 'xlsx';
@@ -29,7 +30,7 @@ const AddQuestion = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(process.env.REACT_APP_Admin_questions_add, {
+      await axios.post(srv(process.env.REACT_APP_Admin_questions_add), {
         topic: formData.topic,
         title: formData.title,
         difficulty: formData.difficulty,
@@ -110,7 +111,7 @@ const AddQuestion = () => {
           continue;
         }
         try {
-          await axios.post(process.env.REACT_APP_Admin_questions_add, {
+          await axios.post(srv(process.env.REACT_APP_Admin_questions_add), {
             topic: problem.topic,
             title: problem.title,
             difficulty: problem.difficulty,

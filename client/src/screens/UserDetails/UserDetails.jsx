@@ -1,3 +1,4 @@
+import { srv } from "../../utils/serverBase";
 import React, { useState, useEffect } from "react"; import { useNavigate } from "react-router-dom"; import axios from "axios"; import { handleLogout } from "../../utils/Logout"; import Layout from "../../Layout1/Layout"; import Navbar from "../../Layout1/Navbar"; import ReactECharts from "echarts-for-react"; import * as echarts from 'echarts/core'; import { TooltipComponent, VisualMapComponent, CalendarComponent } from 'echarts/components'; import { HeatmapChart } from 'echarts/charts'; import { CanvasRenderer } from 'echarts/renderers';
 
 echarts.use([TooltipComponent, VisualMapComponent, CalendarComponent, HeatmapChart, CanvasRenderer]);
@@ -14,7 +15,7 @@ const UserDetails = () => {
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const res = await axios.get(process.env.REACT_APP_USER_PROFILE, { withCredentials: true });
+        const res = await axios.get(srv(process.env.REACT_APP_USER_PROFILE), { withCredentials: true });
         const data = res.data.user;
         setName(data.name || ""); setEmail(data.email || ""); setBio(data.bio || "");
         setProfileImage(data.profileimage || ""); setUserPosts(data.posts || []);
@@ -23,7 +24,7 @@ const UserDetails = () => {
 
     const fetchFollowDashboard = async () => {
       try {
-        const response = await axios.get(process.env.REACT_APP_FOLLOW_DASHBOARD, { withCredentials: true });
+        const response = await axios.get(srv(process.env.REACT_APP_FOLLOW_DASHBOARD), { withCredentials: true });
         setFollowersCount(response.data.followed_count || 0);
         setFollowingCount(response.data.following_count || 0);
         setFollowers_name(response.data.Followers_user_names || []);
@@ -37,7 +38,7 @@ const UserDetails = () => {
   useEffect(() => {
     const fetchActivityData = async () => {
       try {
-        const res = await axios.get(process.env.REACT_APP_ACTIVITY_LOG, { withCredentials: true });
+        const res = await axios.get(srv(process.env.REACT_APP_ACTIVITY_LOG), { withCredentials: true });
         const logins = res.data.logins || {};
         const formatted = Object.entries(logins).map(([day, value]) => ({ day, value }));
         setActivityData(formatted);

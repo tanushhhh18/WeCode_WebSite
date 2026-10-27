@@ -1,3 +1,4 @@
+import { srv } from "../../utils/serverBase";
 import React, { useState } from 'react';
 import axios from 'axios';
 
@@ -19,7 +20,7 @@ const AddHandlers = () => {
     try {
       // Post the handler data to the backend
       const response = await axios.post(
-        process.env.REACT_APP_QUESTION_HANDLER,
+        srv(process.env.REACT_APP_QUESTION_HANDLER),
         {
           title,
           javascript,

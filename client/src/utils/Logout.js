@@ -1,10 +1,11 @@
+import { srv } from "./serverBase";
 // client/src/utils/Logout.js
 import axios from "axios";
 
 export const handleLogout = async (navigate) => {
   try {
     await axios.post(
-      process.env.REACT_APP_LOGOUT_URI,
+      srv(process.env.REACT_APP_LOGOUT_URI),
       {},
       { withCredentials: true }
     );

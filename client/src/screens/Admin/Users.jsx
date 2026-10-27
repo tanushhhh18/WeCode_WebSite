@@ -1,3 +1,4 @@
+import { srv } from "../../utils/serverBase";
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import socket from '../../sockets/socket';
@@ -14,9 +15,9 @@ const Users = () => {
   const fetchUserStats = async () => {
     try {
       const [totalUsersRes, googleUsersRes, signedInUsersRes] = await Promise.all([
-        axios.get(process.env.REACT_APP_ALL_USERS, { withCredentials: true }),
-        axios.get(process.env.REACT_APP_ALL_GOOGLE_USERS, { withCredentials: true }),
-        axios.get(process.env.REACT_APP_ALL_USERS_SIGNED_IN, { withCredentials: true })
+        axios.get(srv(process.env.REACT_APP_ALL_USERS), { withCredentials: true }),
+        axios.get(srv(process.env.REACT_APP_ALL_GOOGLE_USERS), { withCredentials: true }),
+        axios.get(srv(process.env.REACT_APP_ALL_USERS_SIGNED_IN), { withCredentials: true })
       ]);
       const totalUsers = totalUsersRes.data.users;
       const googleUsers = googleUsersRes.data.users;
@@ -47,7 +48,7 @@ const Users = () => {
     }
     try {
       const response = await axios.post(
-        process.env.REACT_APP_DELETE_USER, 
+        srv(process.env.REACT_APP_DELETE_USER), 
         { userId },
         { withCredentials: true }
       );

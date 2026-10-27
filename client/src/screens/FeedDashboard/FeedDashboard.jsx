@@ -1,3 +1,4 @@
+import { srv } from "../../utils/serverBase";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -12,7 +13,7 @@ const Feed = () => {
   useEffect(() => {
     const fetchFeed = async () => {
       try {
-        const response = await axios.get(process.env.REACT_APP_FETCH_FEED, { withCredentials: true });
+        const response = await axios.get(srv(process.env.REACT_APP_FETCH_FEED), { withCredentials: true });
         setPosts(response.data.posts); setName(response.data.name);
       } catch (error) { console.error("Error fetching feed:", error); }
     };

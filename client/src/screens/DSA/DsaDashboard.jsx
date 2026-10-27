@@ -1,3 +1,4 @@
+import { srv } from "../../utils/serverBase";
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import * as XLSX from "xlsx";
@@ -41,10 +42,10 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchQuestionsFromBackend = async () => {
       try {
-        const response = await axios.get(process.env.REACT_APP_GET_ALL_QUESTIONS, { withCredentials: true });
+        const response = await axios.get(srv(process.env.REACT_APP_GET_ALL_QUESTIONS), { withCredentials: true });
         const questionList = response.data.questions;
 
-        const dashboardInfo = await axios.get(process.env.REACT_APP_FETCH_DASHBOARD, { withCredentials: true });
+        const dashboardInfo = await axios.get(srv(process.env.REACT_APP_FETCH_DASHBOARD), { withCredentials: true });
         const { importantQuestions, revisionQuestions } = dashboardInfo.data;
 
         const cleanedData = questionList.map((q) => ({
@@ -87,7 +88,7 @@ const Dashboard = () => {
 
     try {
       const token = localStorage.getItem("authToken");
-      const response = await axios.get(process.env.REACT_APP_ROOM_CREATE, {
+      const response = await axios.get(srv(process.env.REACT_APP_ROOM_CREATE), {
         withCredentials: true,
         headers: {...(token && { Authorization: `Bearer ${token}` })},
       });
@@ -104,7 +105,7 @@ const Dashboard = () => {
     const privateRoomId = prompt(`Enter private room ID for "${question.Title}"`);
     if (!privateRoomId) return;
     try {
-      await axios.post(process.env.REACT_APP_ROOM_JOIN, { roomId: privateRoomId }, { withCredentials: true });
+      await axios.post(srv(process.env.REACT_APP_ROOM_JOIN), { roomId: privateRoomId }, { withCredentials: true });
       const publicRoomId = slugify(question.Title);
       navigate(`/customroom/${publicRoomId}/${privateRoomId}`, {
         state: {
@@ -128,7 +129,7 @@ const Dashboard = () => {
     const newValue = value === "Yes" ? "No" : "Yes";
     try {
       const response = await axios.post(
-        process.env.REACT_APP_UPDATE_QUESTION_URI,
+        srv(process.env.REACT_APP_UPDATE_QUESTION_URI),
         {
           title: updatedQuestions[index].Topic,
           questionId: updatedQuestions[index].Title,
@@ -148,7 +149,7 @@ const Dashboard = () => {
   
   const fetchResponse = async () => {
     try {
-      const response = await axios.get(process.env.REACT_APP_FETCH_DASHBOARD, { withCredentials: true });
+      const response = await axios.get(srv(process.env.REACT_APP_FETCH_DASHBOARD), { withCredentials: true });
       const { importantQuestions, revisionQuestions } = response.data;
 
       const updatedData = questions.map((q) => ({

@@ -1,3 +1,4 @@
+import { srv } from "../../utils/serverBase";
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -15,7 +16,7 @@ const RegisterUserScreen = () => {
     e.preventDefault();
     try {
       const res = await axios.post(
-        process.env.REACT_APP_REGISTER_URI,
+        srv(process.env.REACT_APP_REGISTER_URI),
         { name, email, password },
         { withCredentials: true }
       );
@@ -33,7 +34,7 @@ const RegisterUserScreen = () => {
       const result = await loginWithGoogle();
       const idToken = await result.user.getIdToken();
       await axios.post(
-        `${process.env.REACT_APP_GOOGLE_AUTH_URI}`,
+        `${srv(process.env.REACT_APP_GOOGLE_AUTH_URI)}`,
         { idToken },
         { withCredentials: true }
       );

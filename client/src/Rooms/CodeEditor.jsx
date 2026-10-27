@@ -1,3 +1,4 @@
+import { srv } from "../utils/serverBase";
 import React, { useState, useRef, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Box, HStack, VStack, Button, Text, Flex } from "@chakra-ui/react";
@@ -93,7 +94,7 @@ const CodeEditor = ({ editorRef, languageId, setLanguageId, defaultLanguageId = 
   useEffect(() => {
     const fetchDefaultCode = async () => {
       const title = publicRoomId?.replace(/-/g, " "); const lang = getLanguageName(languageId); if (!title) return;
-      try { const res = await fetch(`${process.env.REACT_APP_TESTCASE_API}/default/${title}`); const data = await res.json(); const defaultCode = data?.defaultCode; if (defaultCode) { setValue(defaultCode); } } catch (err) { console.error("Failed to load default code from backend", err); }
+      try { const res = await fetch(`${srv(process.env.REACT_APP_TESTCASE_API)}/default/${title}`); const data = await res.json(); const defaultCode = data?.defaultCode; if (defaultCode) { setValue(defaultCode); } } catch (err) { console.error("Failed to load default code from backend", err); }
     };
     fetchDefaultCode();
   }, [publicRoomId]);

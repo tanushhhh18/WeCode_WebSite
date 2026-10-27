@@ -1,3 +1,4 @@
+import { srv } from "../../utils/serverBase";
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -8,7 +9,7 @@ const AllQuestions = () => {
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const response = await axios.get(process.env.REACT_APP_GET_ALL_QUESTIONS, { withCredentials: true });
+        const response = await axios.get(srv(process.env.REACT_APP_GET_ALL_QUESTIONS), { withCredentials: true });
         setQuestionsList(response.data.questions);
       } catch (err) {
         console.error("Failed to fetch questions", err);

@@ -1,3 +1,4 @@
+import { srv } from "../../utils/serverBase";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -13,13 +14,13 @@ const LoginScreen = () => {
   useEffect(() => { checkServerStatus(); }, []);
 
   const checkServerStatus = async () => {
-    try { await axios.get(process.env.REACT_APP_SERVER_CHECK); setServerStatus("🟢 Live Server"); } 
+    try { await axios.get(srv(process.env.REACT_APP_SERVER_CHECK)); setServerStatus("🟢 Live Server"); } 
     catch (error) { setServerStatus("🔴 Down Server"); }
   };
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post(process.env.REACT_APP_LOGIN_URI, { email, password }, { withCredentials: true });
+      const response = await axios.post(srv(process.env.REACT_APP_LOGIN_URI), { email, password }, { withCredentials: true });
       setMessage(response.data.message);
       const { role, id } = response.data;
       localStorage.setItem("userId", id);
@@ -92,7 +93,7 @@ const LoginScreen = () => {
               try {
                 const result = await loginWithGoogle();
                 const idToken = await result.user.getIdToken();
-                const response = await axios.post(`${process.env.REACT_APP_GOOGLE_AUTH_URI}`, { idToken }, { withCredentials: true });
+                const response = await axios.post(`${srv(process.env.REACT_APP_GOOGLE_AUTH_URI)}`, { idToken }, { withCredentials: true });
                 setMessage("Login successful");
                 const { role, id } = response.data;
                 localStorage.setItem("userId", id);

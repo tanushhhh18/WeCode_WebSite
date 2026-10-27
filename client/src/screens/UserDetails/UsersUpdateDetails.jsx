@@ -1,3 +1,4 @@
+import { srv } from "../../utils/serverBase";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -19,7 +20,7 @@ const UserUpdateDetails = () => {
   useEffect(() => {
     (async () => {
       try {
-        const profileRes = await axios.get(process.env.REACT_APP_USER_PROFILE, { withCredentials: true });
+        const profileRes = await axios.get(srv(process.env.REACT_APP_USER_PROFILE), { withCredentials: true });
         const userData = profileRes.data.user;
         setFormData({
           name: userData.name || "", email: userData.email || "", password: "",
@@ -27,7 +28,7 @@ const UserUpdateDetails = () => {
           github: userData.github || "", linkedin: userData.linkedin || ""
         });
         
-        const followRes = await axios.get(process.env.REACT_APP_FOLLOW_DASHBOARD, { withCredentials: true });
+        const followRes = await axios.get(srv(process.env.REACT_APP_FOLLOW_DASHBOARD), { withCredentials: true });
         setCounts({ following: followRes.data.following_count, followers: followRes.data.followed_count });
       } catch (error) { console.error("Error fetching data:", error); }
     })();
@@ -47,7 +48,7 @@ const UserUpdateDetails = () => {
     if (profileImageFile) formPayload.append("profileImage", profileImageFile);
 
     try {
-      await axios.post(process.env.REACT_APP_USER_UPDATE_PROFILE, formPayload, {
+      await axios.post(srv(process.env.REACT_APP_USER_UPDATE_PROFILE), formPayload, {
         headers: { "Content-Type": "multipart/form-data" }, withCredentials: true,
       });
       setMessage("Profile updated successfully");

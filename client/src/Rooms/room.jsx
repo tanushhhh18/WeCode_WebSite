@@ -1,3 +1,4 @@
+import { srv } from "../utils/serverBase";
 import React from "react";
 import axios from "axios";
 
@@ -7,7 +8,7 @@ import axios from "axios";
 export const createroom = async () => {
   try {
     const response = await axios.get(
-      process.env.REACT_APP_ROOM_CREATE,
+      srv(process.env.REACT_APP_ROOM_CREATE),
       {
         withCredentials: true,
       }
@@ -26,7 +27,7 @@ export const createroom = async () => {
 export const joinroom = async (roomId) => {
   try {
     await axios.post(
-      process.env.REACT_APP_ROOM_JOIN,
+      srv(process.env.REACT_APP_ROOM_JOIN),
       { roomId },
       {
         withCredentials: true,

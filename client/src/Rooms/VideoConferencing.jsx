@@ -1,3 +1,4 @@
+import { srv } from "../utils/serverBase";
 import React, { useEffect, useRef, useState } from "react";
 import Video from "twilio-video";
 import { Box, Text, Button, Badge, Avatar, Flex, IconButton, Tooltip } from "@chakra-ui/react";
@@ -76,7 +77,7 @@ const VideoConferencing = ({ roomId, identity }) => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await axios.get(process.env.REACT_APP_ALL_USERS, { withCredentials: true });
+        const res = await axios.get(srv(process.env.REACT_APP_ALL_USERS), { withCredentials: true });
         console.log("Fetched users:", res.data);
         const map = {};
         res.data.users.forEach(user => {
@@ -98,7 +99,7 @@ const VideoConferencing = ({ roomId, identity }) => {
       try {
         console.log("Attempting to join Twilio room:", roomId, "with identity:", identity);
         console.log("Connecting to Twilio with identity:", identity, "and roomId:", roomId);
-        const res = await axios.get(process.env.REACT_APP_VIDEO_TOKEN, {
+        const res = await axios.get(srv(process.env.REACT_APP_VIDEO_TOKEN), {
           params: { identity, room: roomId },
         });
         const token = res.data.token;
