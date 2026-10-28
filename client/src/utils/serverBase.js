@@ -1,7 +1,9 @@
 // Where the WeCode server lives. Stashr is the ONLY source (the "wecode" Server URLs list): there is no env host and no
 // fallback address. Every endpoint keeps its own path; only the host part follows Stashr. Switched off or never reached
 // means the endpoints that point at the main server reach no server (the last answer Stashr gave is kept).
-const REGISTRY_HOST = "https://password-manager-server-xxdr.onrender.com";
+// The Stashr address comes from the build env (REACT_APP_STASHR_SERVER_URL, written by Stashr when its main server
+// changes). The old address is only the default when that variable is not set.
+const REGISTRY_HOST = String(process.env.REACT_APP_STASHR_SERVER_URL || "https://password-manager-server-xxdr.onrender.com").trim().replace(/\/+$/, "");
 const APP = "wecode";
 const CACHE_KEY = "stashr.server." + APP;
 // Used as the host when Stashr has none: every request then fails at once.
