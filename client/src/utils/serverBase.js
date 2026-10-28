@@ -7,8 +7,6 @@ const CACHE_KEY = "stashr.server." + APP;
 // Used as the host when Stashr has none: every request then fails at once.
 const NO_SERVER = "https://stashr-no-server.invalid";
 const originOf = (url) => { try { return new URL(url).origin; } catch { return ""; } };
-// Only used to tell which endpoints point at the main server (and their paths); never used as an address.
-const BUILD_ORIGIN = originOf(process.env.REACT_APP_BACKEND_URI || process.env.REACT_APP_SERVER_CHECK || process.env.REACT_APP_LOGIN_URI);
 
 const readCache = () => { try { const v = JSON.parse(localStorage.getItem(CACHE_KEY)); return v && typeof v.origin === "string" ? v : null; } catch { return null; } };
 const writeCache = (origin) => { try { localStorage.setItem(CACHE_KEY, JSON.stringify({ origin })); } catch { /* private mode */ } };
@@ -38,8 +36,8 @@ export async function resolveServerBase() {
   return base;
 }
 
-/** An endpoint address from the build-time env, moved to the Stashr server when it points at the main server. */
+/** An endpoint address from the build-time env. Only its path is used (a full URL or just "/login"); the host always comes from Stashr. */
 export function srv(url) {
-  if (!url || !BUILD_ORIGIN || originOf(url) !== BUILD_ORIGIN) return url;
-  try { const u = new URL(url); return base + u.pathname + u.search + u.hash; } catch { return url; }
+  if (!url) return url;
+  try { const u = new URL(url, "http://stashr.invalid"); return base + u.pathname + u.search + u.hash; } catch { return url; }
 }
